@@ -13,13 +13,13 @@ import {
 import './App.css';
 
 function App() {
-  // State for simulation controls
+  // State for simulation controls - REALISTIC ORANGE LIBERIA VALUES
   const [forecastHorizon, setForecastHorizon] = useState(60);
-  const [baseARPU, setBaseARPU] = useState(8.0);
-  const [arpuGrowthRate, setArpuGrowthRate] = useState(2.0);
-  const [baseChurnRate, setBaseChurnRate] = useState(5.0);
-  const [churnMonthlyChange, setChurnMonthlyChange] = useState(-10);
-  const [startingSubscribers, setStartingSubscribers] = useState(5.0);
+  const [baseARPU, setBaseARPU] = useState(4.5); // Changed from 8.0
+  const [arpuGrowthRate, setArpuGrowthRate] = useState(1.5); // Changed from 2.0
+  const [baseChurnRate, setBaseChurnRate] = useState(6.0); // Changed from 5.0
+  const [churnMonthlyChange, setChurnMonthlyChange] = useState(-5); // Changed from -10
+  const [startingSubscribers, setStartingSubscribers] = useState(1.2); // Changed from 5.0
   
   // State for forecast data
   const [forecastData, setForecastData] = useState([]);
@@ -76,11 +76,11 @@ function App() {
         
         // Process uploaded data and update forecast
         if (jsonData.length > 0 && jsonData[0].baseARPU !== undefined) {
-          setBaseARPU(parseFloat(jsonData[0].baseARPU) || 8.0);
-          setArpuGrowthRate(parseFloat(jsonData[0].arpuGrowthRate) || 2.0);
-          setBaseChurnRate(parseFloat(jsonData[0].baseChurnRate) || 5.0);
-          setChurnMonthlyChange(parseFloat(jsonData[0].churnMonthlyChange) || -10);
-          setStartingSubscribers(parseFloat(jsonData[0].startingSubscribers) || 5.0);
+          setBaseARPU(parseFloat(jsonData[0].baseARPU) || 4.5);
+          setArpuGrowthRate(parseFloat(jsonData[0].arpuGrowthRate) || 1.5);
+          setBaseChurnRate(parseFloat(jsonData[0].baseChurnRate) || 6.0);
+          setChurnMonthlyChange(parseFloat(jsonData[0].churnMonthlyChange) || -5);
+          setStartingSubscribers(parseFloat(jsonData[0].startingSubscribers) || 1.2);
           
           alert('Data uploaded successfully! Dashboard updated.');
         } else {
@@ -105,7 +105,7 @@ function App() {
     
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Forecast');
-    XLSX.writeFile(workbook, 'telco_forecast.xlsx');
+    XLSX.writeFile(workbook, 'orange_liberia_forecast.xlsx');
   };
 
   // Format AI response with paragraph spacing
@@ -160,7 +160,7 @@ function App() {
             messages: [
               {
                 role: 'system',
-                content: 'You are an AI assistant helping executives analyze a Telco dashboard for ARPU and Churn forecasting. Provide professional telco insights and help with what-if analysis.'
+                content: 'You are an AI assistant helping Orange Telecom Liberia executives analyze a dashboard for ARPU and Churn forecasting. Orange Liberia operates in the Liberian telecommunications market with approximately 1-1.5 million subscribers. Provide professional, context-aware telco insights specific to the Liberian market and help with what-if analysis. Revenue figures should be in millions of USD, not billions.'
               },
               {
                 role: 'user',
@@ -205,28 +205,31 @@ function App() {
     setIsLoading(true);
 
     try {
-      // Create context about current dashboard state
+      // Create context about current dashboard state - WITH REALISTIC VALUES
+      const finalMonthData = forecastData[forecastData.length - 1];
+      const totalRevenue = forecastData.reduce((sum, d) => sum + d.revenue, 0);
+      
       const dashboardContext = `
-Current Dashboard State:
+Current Orange Liberia Dashboard State:
+- Market Context: Orange Liberia operates in Liberia with ~1-1.5M subscribers
 - Base ARPU: $${baseARPU}
-- ARPU Growth Rate: ${arpuGrowthRate}%
+- ARPU Growth Rate: ${arpuGrowthRate}% monthly
 - Base Churn Rate: ${baseChurnRate}%
 - Churn Monthly Change: ${churnMonthlyChange} bps
 - Starting Subscribers: ${startingSubscribers}M
 - Forecast Horizon: ${forecastHorizon} months
 
-Latest Forecast Results:
-- Final ARPU: $${forecastData[forecastData.length - 1]?.arpu}
-- Final Churn Rate: ${forecastData[forecastData.length - 1]?.churnRate}%
-- Final Subscribers: ${(forecastData[forecastData.length - 1]?.subscribers / 1000000).toFixed(2)}M
-- Total Revenue: $${forecastData.reduce((sum, d) => sum + d.revenue, 0).toLocaleString()}
+Latest Forecast Results (Month ${forecastHorizon}):
+- Final ARPU: $${finalMonthData?.arpu.toFixed(2)}
+- Final Churn Rate: ${finalMonthData?.churnRate.toFixed(2)}%
+- Final Subscribers: ${(finalMonthData?.subscribers / 1000000).toFixed(2)}M
+- Total ${forecastHorizon}-Month Revenue: $${(totalRevenue / 1000000).toFixed(1)}M (millions, not billions)
 
-You are an AI assistant helping executives analyze a Telco dashboard for ARPU and Churn forecasting. 
-Provide professional telco insights and help with what-if analysis.
+IMPORTANT: All revenue figures are in MILLIONS of USD. Orange Liberia's market size means revenues are in the hundreds of millions, not billions.
 
 User Question: ${userMessage}
 
-Provide a clear, professional response with paragraph spacing. If the user asks a what-if question about changing parameters, provide specific numerical impacts and suggest the parameter changes needed.
+Provide a clear, professional response specific to Orange Liberia's market context. If discussing what-if scenarios, use realistic assumptions for the Liberian telecom market. Format your response with clear paragraphs.
 `;
 
       // Try all providers with automatic fallback
@@ -319,7 +322,7 @@ Provide a clear, professional response with paragraph spacing. If the user asks 
           alt="Strategy House"
           className="logo-left"
         />
-        <h1 className="main-title">Telco Executive Dashboard: ARPU & Churn Forecasting</h1>
+        <h1 className="main-title">Orange Liberia Executive Dashboard: ARPU & Churn Forecasting</h1>
         <img 
           src="https://images.groovetech.io/4_o_OdYYdW0sxTXIcQdDZxk_3-IjdZa6edWxA1nO8uM/rs:fit:0:0:0/g:no:0:0/c:0:0/aHR0cHM6Ly9hc3NldHMuZ3Jvb3ZlYXBwcy5jb20vaW1hZ2VzLzVmNWQ1NDkzODA2NmVmMDA2OTQwMmRlMy8xNzYzMjI1ODkxX0NvcnJlY3RPcmFuZ2VMb2dvLmpwZw.webp"
           alt="Orange"
@@ -329,15 +332,15 @@ Provide a clear, professional response with paragraph spacing. If the user asks 
 
       {/* Introduction */}
       <div className="intro">
-        <p>Welcome to the <strong>AI-Driven Telco Dashboard</strong>.</p>
-        <p>This interactive tool is designed for executives to:</p>
+        <p>Welcome to the <strong>Orange Liberia AI-Driven Executive Dashboard</strong>.</p>
+        <p>This interactive tool is designed for Orange Liberia executives to:</p>
         <ul>
           <li>Understand the <strong>impact of ARPU and Churn on revenue</strong></li>
-          <li>Simulate <strong>different business scenarios</strong></li>
+          <li>Simulate <strong>different business scenarios</strong> for the Liberian market</li>
           <li>Download results for <strong>boardroom reporting</strong></li>
           <li><strong>Ask AI questions</strong> for instant insights and what-if analysis</li>
         </ul>
-        <p>💡 This demo is an example of how <strong>AI leadership</strong> can enable faster, data-driven decision-making.</p>
+        <p>💡 This demo shows how <strong>AI leadership</strong> enables faster, data-driven decision-making for telco executives.</p>
       </div>
 
       {/* Main Content */}
@@ -467,7 +470,7 @@ Provide a clear, professional response with paragraph spacing. If the user asks 
               </div>
 
               <div className="chart-container">
-                <h3>Revenue Forecast</h3>
+                <h3>Revenue Forecast (USD)</h3>
                 <ResponsiveContainer width="100%" height={250}>
                   <LineChart data={forecastData}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -490,13 +493,14 @@ Provide a clear, professional response with paragraph spacing. If the user asks 
               <div className="chat-messages">
                 {chatMessages.length === 0 && (
                   <div className="chat-welcome">
-                    <p><strong>Welcome! I'm your AI Assistant.</strong></p>
+                    <p><strong>Welcome! I'm your Orange Liberia AI Assistant.</strong></p>
                     <p>Try asking questions like:</p>
                     <ul>
-                      <li>"What if ARPU declined by 30%?"</li>
-                      <li>"What would happen if monthly churn change was 15%?"</li>
-                      <li>"How can we improve subscriber retention?"</li>
-                      <li>"What's the revenue impact of reducing churn by 2%?"</li>
+                      <li>"What if ARPU declined by 15%?"</li>
+                      <li>"What would happen if we reduced churn by 2%?"</li>
+                      <li>"How can we improve subscriber retention in Liberia?"</li>
+                      <li>"What's the revenue impact of increasing ARPU to $5?"</li>
+                      <li>"What if we gained 300,000 new subscribers?"</li>
                     </ul>
                   </div>
                 )}
@@ -547,12 +551,13 @@ Provide a clear, professional response with paragraph spacing. If the user asks 
                 <p><strong>Final Subscribers after {forecastHorizon} months:</strong> {(finalMonth.subscribers / 1000000).toFixed(2)}M</p>
                 <p><strong>Final ARPU:</strong> ${finalMonth.arpu.toFixed(2)}</p>
                 <p><strong>Final Churn Rate:</strong> {finalMonth.churnRate.toFixed(2)}%</p>
-                <p><strong>Total Revenue:</strong> ${totalRevenue.toLocaleString()}</p>
+                <p><strong>Total {forecastHorizon}-Month Revenue:</strong> ${(totalRevenue / 1000000).toFixed(1)}M (millions USD)</p>
+                <p><strong>Average Monthly Revenue:</strong> ${(totalRevenue / forecastHorizon / 1000000).toFixed(2)}M</p>
                 
                 <p className="observation">
-                  💡 <em>Observation:</em> Even small changes in <strong>ARPU growth</strong> or <strong>Churn rate</strong> have 
-                  a massive impact on revenue. This dashboard shows how executives can test different scenarios and adjust 
-                  <strong> pricing, promotions, and retention strategies</strong> to sustain growth.
+                  💡 <em>Orange Liberia Insight:</em> Even small changes in <strong>ARPU growth</strong> or <strong>Churn rate</strong> have 
+                  a significant impact on revenue for Orange Liberia's market. This dashboard demonstrates how executives can test different scenarios and adjust 
+                  <strong> pricing, promotions, and retention strategies</strong> to sustain growth in the competitive Liberian telecommunications market.
                 </p>
               </div>
             )}
@@ -562,7 +567,7 @@ Provide a clear, professional response with paragraph spacing. If the user asks 
 
       {/* Footer */}
       <footer className="footer">
-        <p>© 2025 Suleiman Shaibu</p>
+        <p>© 2025 Suleiman Shaibu | Orange Telecom Liberia Executive Dashboard</p>
       </footer>
     </div>
   );

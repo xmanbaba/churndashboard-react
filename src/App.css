@@ -217,9 +217,9 @@ body {
   padding-bottom: 10px;
 }
 
-/* Visualizations */
+/* Visualizations - FIXED FOR Y-AXIS VISIBILITY */
 .visualizations {
-  margin-bottom: 40px;
+  margin-bottom: 80px;
 }
 
 .charts-grid {
@@ -227,17 +227,19 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 50px;
   margin-top: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 100px;
+  padding-bottom: 50px;
 }
 
 .chart-container {
   background-color: var(--white);
   padding: 30px;
-  padding-left: 35px;
+  padding-left: 45px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border: 2px solid var(--gray-light);
   min-width: 400px;
+  margin-bottom: 30px;
 }
 
 .chart-container h3 {
@@ -247,8 +249,9 @@ body {
   text-align: center;
 }
 
-/* AI Chat Section */
+/* AI Chat Section - MORE SPACING FROM CHARTS */
 .ai-chat-section {
+  margin-top: 60px;
   margin-bottom: 40px;
   background-color: var(--gray-light);
   padding: 25px;
